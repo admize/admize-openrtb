@@ -1,0 +1,55 @@
+# Table of Contents
+
+## Introduction
+
+* [Overview](README.md)
+
+## SSP Integration
+
+* [Introduction](ssp/README.md)
+* [Bid Request](ssp/bid-request.md)
+  * [BidRequest Object](ssp/bid-request.md#bidrequest-object)
+  * [Imp Object](ssp/bid-request.md#imp-object)
+  * [Banner Object](ssp/bid-request.md#banner-object)
+  * [Video Object](ssp/bid-request.md#video-object)
+  * [Native Object](ssp/bid-request.md#native-object)
+  * [App Object](ssp/bid-request.md#app-object)
+  * [Site Object](ssp/bid-request.md#site-object)
+  * [Device Object](ssp/bid-request.md#device-object)
+* [Bid Response](ssp/bid-response.md)
+  * [BidResponse Object](ssp/bid-response.md#bidresponse-object)
+  * [Seatbid Object](ssp/bid-response.md#seatbid-object)
+  * [Bid Object](ssp/bid-response.md#bid-object)
+  * [Substitution Macros](ssp/bid-response.md#substitution-macros)
+* [Native Specification](ssp/native-spec.md)
+  * [Request Object](ssp/native-spec.md#request-object)
+  * [Response Object](ssp/native-spec.md#response-object)
+  * [Reference & Enumeration](ssp/native-spec.md#reference-enumeration)
+* [Request & Response Examples](ssp/examples.md)
+  * [Banner Examples](ssp/examples.md#banner-examples)
+  * [Native Examples](ssp/examples.md#native-examples)
+
+## DSP Integration
+
+* [Introduction](dsp/README.md)
+* [Bid Request](dsp/bid-request.md)
+  * [Request Header](dsp/bid-request.md#request-header)
+  * [BidRequest Object](dsp/bid-request.md#bidrequest-object)
+  * [Imp Object](dsp/bid-request.md#imp-object)
+  * [Banner Object](dsp/bid-request.md#banner-object)
+  * [Native Object](dsp/bid-request.md#native-object)
+  * [App Object](dsp/bid-request.md#app-object)
+  * [Site Object](dsp/bid-request.md#site-object)
+  * [Device Object](dsp/bid-request.md#device-object)
+* [Bid Response](dsp/bid-response.md)
+  * [BidResponse Object](dsp/bid-response.md#bidresponse-object)
+  * [Seatbid Object](dsp/bid-response.md#seatbid-object)
+  * [Bid Object](dsp/bid-response.md#bid-object)
+  * [Substitution Macros](dsp/bid-response.md#substitution-macros)
+* [Native Specification](dsp/native-spec.md)
+  * [Request Object](dsp/native-spec.md#request-object)
+  * [Response Object](dsp/native-spec.md#response-object)
+  * [Reference & Enumeration](dsp/native-spec.md#reference-enumeration)
+* [Request & Response Examples](dsp/examples.md)
+  * [Banner Examples](dsp/examples.md#banner-examples)
+  * [Native Examples](dsp/examples.md#native-examples)
