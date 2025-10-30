@@ -1,4 +1,4 @@
-# Object Specifications
+# 4.2 Object Specifications
 
 The subsections that follow define each of the objects in the bid response model. Several conventions are used throughout:
 
@@ -6,7 +6,7 @@ The subsections that follow define each of the objects in the bid response model
 - Some optional attributes are denoted "recommended" due to their elevated business importance.
 - Unless a default value is explicitly specified, an omitted attribute is interpreted as "unknown".
 
-## 1 Object: BidResponse
+## 4.2.1 Object: BidResponse
 
 This object is the top-level bid response object (i.e., the unnamed outer JSON object). The `id` attribute is a reflection of the bid request ID for logging purposes. Similarly, `bidid` is an optional response tracking ID for bidders. If specified, it can be included in the subsequent win notice call if the bidder wins. At least one seatbid object is required, which contains at least one bid for an impression. Other attributes are optional.
 
@@ -22,18 +22,18 @@ To express a "no-bid", the options are to return an empty response with HTTP 204
 | nbr | integer | Optional | - | Reason for not bidding. Refer to List 5.24. |
 | ext | object | Optional | - | Placeholder for bidder-specific extensions to OpenRTB. |
 
-## 2 Object: SeatBid
+## 4.2.2 Object: SeatBid
 
 A bid response can contain multiple SeatBid objects, each on behalf of a different bidder seat and each containing one or more individual bids. If multiple impressions are presented in the request, the `group` attribute can be used to specify if a seat is willing to accept any impressions that it can win (default) or if it is only interested in winning any if it can win them all as a group.
 
 | Attribute | Type | Require/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
-| bid | object array | Required | - | Array of 1+ Bid objects (Section 3) each related to an impression. Multiple bids can relate to the same impression. |
+| bid | object array | Required | - | Array of 1+ Bid objects (Section 4.2.3) each related to an impression. Multiple bids can relate to the same impression. |
 | seat | string | Optional | - | ID of the buyer seat (e.g., advertiser, agency) on whose behalf this bid is made. |
 | group | integer | Optional | 0 | 0 = impressions can be won individually; 1 = impressions must be won or lost as a group. |
 | ext | object | Optional | - | Placeholder for bidder-specific extensions to OpenRTB. |
 
-## 3 Object: Bid
+## 4.2.3 Object: Bid
 
 A SeatBid object contains one or more Bid objects, each of which relates to a specific impression in the bid request via the `impid` attribute and constitutes an offer to buy that impression for a given price.
 

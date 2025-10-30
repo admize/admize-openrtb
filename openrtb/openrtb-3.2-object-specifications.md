@@ -1,28 +1,25 @@
-# Bid Request
+# 3.2 Object Specifications
 
-This page describes the bid request format sent from SSPs to Admize.
+The subsections that follow define each of the objects in the bid request model. Several conventions are used throughout:
 
-## Request Header
+- Attributes are "required" if their omission would technically break the protocol.
+- Some optional attributes are denoted "recommended" due to their elevated business importance.
+- Unless a default value is explicitly specified, an omitted attribute is interpreted as "unknown".
 
-HTTP headers sent with each bid request:
+## 3.2.1 Object: BidRequest
 
-- `Content-Type`: application/json
-- `Content-Encoding`: gzip (optional)
-
-## 1 Object: BidRequest
-
-The top-level bid request object contains a globally unique bid request or auction ID. This `id` attribute is required as is at least one impression object (Section 4). Other attributes in this top-level object establish rules and restrictions that apply to all impressions being offered.
+The top-level bid request object contains a globally unique bid request or auction ID. This `id` attribute is required as is at least one impression object (Section 3.2.4). Other attributes in this top-level object establish rules and restrictions that apply to all impressions being offered.
 
 There are also several subordinate objects that provide detailed data to potential buyers. Among these are the Site and App objects, which describe the type of published media in which the impression(s) appear. These objects are highly recommended, but only one applies to a given bid request depending on whether the media is browser-based web content or a non-browser application, respectively.
 
 | Attribute | Type | Require/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
 | id | string | Required | - | Unique ID of the bid request, provided by the exchange. |
-| imp | object array | Required | - | Array of Imp objects (Section 4) representing the impressions offered. At least 1 Imp object is required. |
-| site | object | Recommended | - | Details via a Site object (Section 13) about the publisher's website. Only applicable and recommended for websites. |
-| app | object | Recommended | - | Details via an App object (Section 14) about the publisher's app (i.e., non-browser applications). Only applicable and recommended for apps. |
-| device | object | Recommended | - | Details via a Device object (Section 18) about the user's device to which the impression will be delivered. |
-| user | object | Recommended | - | Details via a User object (Section 20) about the human user of the device; the advertising audience. |
+| imp | object array | Required | - | Array of Imp objects (Section 3.2.4) representing the impressions offered. At least 1 Imp object is required. |
+| site | object | Recommended | - | Details via a Site object (Section 3.2.13) about the publisher's website. Only applicable and recommended for websites. |
+| app | object | Recommended | - | Details via an App object (Section 3.2.14) about the publisher's app (i.e., non-browser applications). Only applicable and recommended for apps. |
+| device | object | Recommended | - | Details via a Device object (Section 3.2.18) about the user's device to which the impression will be delivered. |
+| user | object | Recommended | - | Details via a User object (Section 3.2.20) about the human user of the device; the advertising audience. |
 | test | integer | Optional | 0 | Indicator of test mode in which auctions are not billable, where 0 = live mode, 1 = test mode. |
 | at | integer | Optional | 2 | Auction type, where 1 = First Price, 2 = Second Price Plus. Exchange-specific auction types can be defined using values greater than 500. |
 | tmax | integer | Optional | - | Maximum time in milliseconds the exchange allows for bids to be received including Internet latency to avoid timeout. This value supersedes any a priori guidance from the exchange. |
@@ -34,11 +31,11 @@ There are also several subordinate objects that provide detailed data to potenti
 | bcat | string array | Optional | - | Blocked advertiser categories using the IAB content categories. Refer to List 5.1. |
 | badv | string array | Optional | - | Block list of advertisers by their domains (e.g., "ford.com"). |
 | bapp | string array | Optional | - | Block list of applications by their platform-specific exchange-independent application identifiers. On Android, these should be bundle or package names (e.g., com.foo.mygame). On iOS, these are numeric IDs. |
-| source | object | Optional | - | A Source object (Section 2) that provides data about the inventory source and which entity makes the final decision. |
-| regs | object | Optional | - | A Regs object (Section 3) that specifies any industry, legal, or governmental regulations in force for this request. |
+| source | object | Optional | - | A Source object (Section 3.2.2) that provides data about the inventory source and which entity makes the final decision. |
+| regs | object | Optional | - | A Regs object (Section 3.2.3) that specifies any industry, legal, or governmental regulations in force for this request. |
 | ext | object | Optional | - | Placeholder for exchange-specific extensions to OpenRTB. |
 
-## 2 Object: Source
+## 3.2.2 Object: Source
 
 This object describes the nature and behavior of the entity that is the source of the bid request upstream from the exchange. The primary purpose of this object is to define post-auction or upstream decisioning when the exchange itself does not control the final decision. A common example of this is header bidding, but it can also apply to upstream server entities such as another RTB exchange, a mediation platform, or an ad server combines direct campaigns with 3rd party demand in decisioning.
 
@@ -49,7 +46,7 @@ This object describes the nature and behavior of the entity that is the source o
 | pchain | string | Recommended | - | Payment ID chain string containing embedded syntax described in the TAG Payment ID Protocol v1.0. |
 | ext | object | Optional | - | Placeholder for exchange-specific extensions to OpenRTB. |
 
-## 3 Object: Regs
+## 3.2.3 Object: Regs
 
 This object contains any legal, governmental, or industry regulations that apply to the request. The coppa flag signals whether or not the request falls under the United States Federal Trade Commission's regulations for the United States Children's Online Privacy Protection Act ("COPPA").
 
@@ -58,21 +55,21 @@ This object contains any legal, governmental, or industry regulations that apply
 | coppa | integer | Optional | - | Flag indicating if this request is subject to the COPPA regulations established by the USA FTC, where 0 = no, 1 = yes. Refer to Section 7.5 for more information. |
 | ext | object | Optional | - | Placeholder for exchange-specific extensions to OpenRTB. |
 
-## 4 Object: Imp
+## 3.2.4 Object: Imp
 
 This object describes an ad placement or impression being auctioned. A single bid request can include multiple Imp objects, a use case for which might be an exchange that supports selling all ad positions on a given page. Each Imp object has a required ID so that bids can reference them individually.
 
-The presence of Banner (Section 6), Video (Section 7), and/or Native (Section 9) objects subordinate to the Imp object indicates the type of impression being offered. The publisher can choose one such type which is the typical case or mix them at their discretion. However, any given bid for the impression must conform to one of the offered types.
+The presence of Banner (Section 3.2.6), Video (Section 3.2.7), and/or Native (Section 3.2.9) objects subordinate to the Imp object indicates the type of impression being offered. The publisher can choose one such type which is the typical case or mix them at their discretion. However, any given bid for the impression must conform to one of the offered types.
 
 | Attribute | Type | Require/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
 | id | string | Required | - | A unique identifier for this impression within the context of the bid request (typically, starts with 1 and increments. |
-| metric | object array | Optional | - | An array of Metric object (Section 5). |
-| banner | object | Optional | - | A Banner object (Section 6); required if this impression is offered as a banner ad opportunity. |
-| video | object | Optional | - | A Video object (Section 7); required if this impression is offered as a video ad opportunity. |
-| audio | object | Optional | - | An Audio object (Section 8); required if this impression is offered as an audio ad opportunity. |
-| native | object | Optional | - | A Native object (Section 9); required if this impression is offered as a native ad opportunity. |
-| pmp | object | Optional | - | A Pmp object (Section 11) containing any private marketplace deals in effect for this impression. |
+| metric | object array | Optional | - | An array of Metric object (Section 3.2.5). |
+| banner | object | Optional | - | A Banner object (Section 3.2.6); required if this impression is offered as a banner ad opportunity. |
+| video | object | Optional | - | A Video object (Section 3.2.7); required if this impression is offered as a video ad opportunity. |
+| audio | object | Optional | - | An Audio object (Section 3.2.8); required if this impression is offered as an audio ad opportunity. |
+| native | object | Optional | - | A Native object (Section 3.2.9); required if this impression is offered as a native ad opportunity. |
+| pmp | object | Optional | - | A Pmp object (Section 3.2.11) containing any private marketplace deals in effect for this impression. |
 | displaymanager | string | Optional | - | Name of ad mediation partner, SDK technology, or player responsible for rendering ad (typically video or mobile). Used by some ad servers to customize ad code by partner. Recommended for video and/or apps. |
 | displaymanagerver | string | Optional | - | Version of ad mediation partner, SDK technology, or player responsible for rendering ad (typically video or mobile). Used by some ad servers to customize ad code by partner. Recommended for video and/or apps. |
 | instl | integer | Optional | 0 | 1 = the ad is interstitial or full screen, 0 = not interstitial. |
@@ -85,7 +82,7 @@ The presence of Banner (Section 6), Video (Section 7), and/or Native (Section 9)
 | exp | integer | Optional | - | Advisory as to the number of seconds that may elapse between the auction and the actual impression. |
 | ext | object | Optional | - | Placeholder for exchange-specific extensions to OpenRTB. |
 
-## 5 Object: Metric
+## 3.2.5 Object: Metric
 
 This object is associated with an impression as an array of metrics. These metrics can offer insight into the impression to assist with decisioning such as average recent viewability, click-through rate, etc. Each metric is identified by its type, reports the value of the metric, and optionally identifies the source or vendor measuring the value.
 
@@ -96,15 +93,15 @@ This object is associated with an impression as an array of metrics. These metri
 | vendor | string | Recommended | - | Source of the value using exchange curated string names which should be published to bidders a priori. If the exchange itself is the source versus a third party, "EXCHANGE" is recommended. |
 | ext | object | Optional | - | Placeholder for exchange-specific extensions to OpenRTB. |
 
-## 6 Object: Banner
+## 3.2.6 Object: Banner
 
-This object represents the most general type of impression. Although the term "banner" may have very specific meaning in other contexts, here it can be many things including a simple static image, an expandable ad unit, or even in-banner video (refer to the Video object in Section 7 for the more generalized and full featured video ad units). An array of Banner objects can also appear within the Video to describe optional companion ads defined in the VAST specification.
+This object represents the most general type of impression. Although the term "banner" may have very specific meaning in other contexts, here it can be many things including a simple static image, an expandable ad unit, or even in-banner video (refer to the Video object in Section 3.2.7 for the more generalized and full featured video ad units). An array of Banner objects can also appear within the Video to describe optional companion ads defined in the VAST specification.
 
 The presence of a Banner as a subordinate of the Imp object indicates that this impression is offered as a banner type impression. At the publisher's discretion, that same impression may also be offered as video, audio, and/or native by also including as Imp subordinates objects of those types. However, any given bid for the impression must conform to one of the offered types.
 
 | Attribute | Type | Require/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
-| format | object array | Recommended | - | Array of format objects (Section 10) representing the banner sizes permitted. If none are specified, then use of the h and w attributes is highly recommended. |
+| format | object array | Recommended | - | Array of format objects (Section 3.2.10) representing the banner sizes permitted. If none are specified, then use of the h and w attributes is highly recommended. |
 | w | integer | Optional | - | Exact width in device independent pixels (DIPS); recommended if no format objects are specified. |
 | h | integer | Optional | - | Exact height in device independent pixels (DIPS); recommended if no format objects are specified. |
 | btype | integer array | Optional | - | Blocked banner ad types. Refer to List 5.2. |
@@ -114,13 +111,13 @@ The presence of a Banner as a subordinate of the Imp object indicates that this 
 | topframe | integer | Optional | - | Indicates if the banner is in the top frame as opposed to an iframe, where 0 = no, 1 = yes. |
 | expdir | integer array | Optional | - | Directions in which the banner may expand. Refer to List 5.5. |
 | api | integer array | Optional | - | List of supported API frameworks for this impression. Refer to List 5.6. If an API is not explicitly listed, it is assumed not to be supported. |
-| id | string | Optional | - | Unique identifier for this banner object. Recommended when Banner objects are used with a Video object (Section 7) to represent an array of companion ads. Values usually start at 1 and increase with each object; should be unique within an impression. |
-| vcm | integer | Optional | - | Relevant only for Banner objects used with a Video object (Section 7) in an array of companion ads. Indicates the companion banner rendering mode relative to the associated video, where 0 = concurrent, 1 = end-card. |
+| id | string | Optional | - | Unique identifier for this banner object. Recommended when Banner objects are used with a Video object (Section 3.2.7) to represent an array of companion ads. Values usually start at 1 and increase with each object; should be unique within an impression. |
+| vcm | integer | Optional | - | Relevant only for Banner objects used with a Video object (Section 3.2.7) in an array of companion ads. Indicates the companion banner rendering mode relative to the associated video, where 0 = concurrent, 1 = end-card. |
 | ext | object | Optional | - | Placeholder for exchange-specific extensions to OpenRTB. |
 
-## 7 Object: Video
+## 3.2.7 Object: Video
 
-This object represents an in-stream video impression. Many of the fields are non-essential for minimally viable transactions, but are included to offer fine control when needed. Video in OpenRTB generally assumes compliance with the VAST standard. As such, the notion of companion ads is supported by optionally including an array of Banner objects (refer to the Banner object in Section 6) that define these companion ads.
+This object represents an in-stream video impression. Many of the fields are non-essential for minimally viable transactions, but are included to offer fine control when needed. Video in OpenRTB generally assumes compliance with the VAST standard. As such, the notion of companion ads is supported by optionally including an array of Banner objects (refer to the Banner object in Section 3.2.6) that define these companion ads.
 
 The presence of a Video as a subordinate of the Imp object indicates that this impression is offered as a video type impression. At the publisher's discretion, that same impression may also be offered as banner, audio, and/or native by also including as Imp subordinates objects of those types. However, any given bid for the impression must conform to one of the offered types.
 
@@ -148,14 +145,14 @@ The presence of a Video as a subordinate of the Imp object indicates that this i
 | playbackend | integer | Optional | - | The event that causes playback to end. Refer to List 5.11. |
 | delivery | integer array | Optional | - | Supported delivery methods (e.g., streaming, progressive). If none specified, assume all are supported. Refer to List 5.15. |
 | pos | integer | Optional | - | Ad position on screen. Refer to List 5.4. |
-| companionad | object array | Optional | - | Array of Banner objects (Section 6) if companion ads are available. |
+| companionad | object array | Optional | - | Array of Banner objects (Section 3.2.6) if companion ads are available. |
 | api | integer array | Optional | - | List of supported API frameworks for this impression. Refer to List 5.6. If an API is not explicitly listed, it is assumed not to be supported. |
-| companiontype | integer array | Optional | - | Supported VAST companion ad types. Refer to List 5.14. Recommended if companion Banner objects are included via the companionad array. If one of these banners will be rendered as an end-card, this can be specified using the vcm attribute with the particular banner (Section 6). |
+| companiontype | integer array | Optional | - | Supported VAST companion ad types. Refer to List 5.14. Recommended if companion Banner objects are included via the companionad array. If one of these banners will be rendered as an end-card, this can be specified using the vcm attribute with the particular banner (Section 3.2.6). |
 | ext | object | Optional | - | Placeholder for exchange-specific extensions to OpenRTB. |
 
-## 8 Object: Audio
+## 3.2.8 Object: Audio
 
-This object represents an audio type impression. Many of the fields are non-essential for minimally viable transactions, but are included to offer fine control when needed. Audio in OpenRTB generally assumes compliance with the DAAST standard. As such, the notion of companion ads is supported by optionally including an array of Banner objects (refer to the Banner object in Section 6) that define these companion ads.
+This object represents an audio type impression. Many of the fields are non-essential for minimally viable transactions, but are included to offer fine control when needed. Audio in OpenRTB generally assumes compliance with the DAAST standard. As such, the notion of companion ads is supported by optionally including an array of Banner objects (refer to the Banner object in Section 3.2.6) that define these companion ads.
 
 The presence of a Audio as a subordinate of the Imp object indicates that this impression is offered as an audio type impression. At the publisher's discretion, that same impression may also be offered as banner, video, and/or native by also including as Imp subordinates objects of those types. However, any given bid for the impression must conform to one of the offered types.
 
@@ -172,7 +169,7 @@ The presence of a Audio as a subordinate of the Imp object indicates that this i
 | minbitrate | integer | Optional | - | Minimum bit rate in Kbps. |
 | maxbitrate | integer | Optional | - | Maximum bit rate in Kbps. |
 | delivery | integer array | Optional | - | Supported delivery methods (e.g., streaming, progressive). If none specified, assume all are supported. Refer to List 5.15. |
-| companionad | object array | Optional | - | Array of Banner objects (Section 6) if companion ads are available. |
+| companionad | object array | Optional | - | Array of Banner objects (Section 3.2.6) if companion ads are available. |
 | api | integer array | Optional | - | List of supported API frameworks for this impression. Refer to List 5.6. If an API is not explicitly listed, it is assumed not to be supported. |
 | companiontype | integer array | Optional | - | Supported DAAST companion ad types. Refer to List 5.14. Recommended if companion Banner objects are included via the companionad array. |
 | maxseq | integer | Optional | - | The maximum number of ads that can be played in an ad pod. |
@@ -181,7 +178,7 @@ The presence of a Audio as a subordinate of the Imp object indicates that this i
 | nvol | integer | Optional | - | Volume normalization mode. Refer to List 5.17. |
 | ext | object | Optional | - | Placeholder for exchange-specific extensions to OpenRTB. |
 
-## 9 Object: Native
+## 3.2.9 Object: Native
 
 This object represents a native type impression. Native ad units are intended to blend seamlessly into the surrounding content (e.g., a sponsored Twitter or Facebook post). As such, the response must be well-structured to afford the publisher fine-grained control over rendering.
 
@@ -197,7 +194,7 @@ The presence of a Native as a subordinate of the Imp object indicates that this 
 | battr | integer array | Optional | - | Blocked creative attributes. Refer to List 5.3. |
 | ext | object | Optional | - | Placeholder for exchange-specific extensions to OpenRTB. |
 
-## 10 Object: Format
+## 3.2.10 Object: Format
 
 This object represents an allowed size (i.e., height and width combination) or Flex Ad parameters for a banner impression. These are typically used in an array where multiple sizes are permitted. It is recommended that either the w/h pair or the wratio/hratio/wmin set (i.e., for Flex Ads) be specified.
 
@@ -210,17 +207,17 @@ This object represents an allowed size (i.e., height and width combination) or F
 | wmin | integer | Optional | - | The minimum width in device independent pixels (DIPS) at which the ad will be displayed the size is expressed as a ratio. |
 | ext | object | Optional | - | Placeholder for exchange-specific extensions to OpenRTB. |
 
-## 11 Object: Pmp
+## 3.2.11 Object: Pmp
 
 This object is the private marketplace container for direct deals between buyers and sellers that may pertain to this impression. The actual deals are represented as a collection of Deal objects. Refer to Section 7.3 for more details.
 
 | Attribute | Type | Require/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
 | private_auction | integer | Optional | 0 | Indicator of auction eligibility to seats named in the Direct Deals object, where 0 = all bids are accepted, 1 = bids are restricted to the deals specified and the terms thereof. |
-| deals | object array | Optional | - | Array of Deal (Section 12) objects that convey the specific deals applicable to this impression. |
+| deals | object array | Optional | - | Array of Deal (Section 3.2.12) objects that convey the specific deals applicable to this impression. |
 | ext | object | Optional | - | Placeholder for exchange-specific extensions to OpenRTB. |
 
-## 12 Object: Deal
+## 3.2.12 Object: Deal
 
 This object constitutes a specific deal that was struck a priori between a buyer and a seller. Its presence with the Pmp collection indicates that this impression is available under the terms of that deal. Refer to Section 7.3 for more details.
 
@@ -234,7 +231,7 @@ This object constitutes a specific deal that was struck a priori between a buyer
 | wadomain | string array | Optional | - | Array of advertiser domains (e.g., advertiser.com) allowed to bid on this deal. Omission implies no advertiser restrictions. |
 | ext | object | Optional | - | Placeholder for exchange-specific extensions to OpenRTB. |
 
-## 13 Object: Site
+## 3.2.13 Object: Site
 
 This object should be included if the ad supported content is a website as opposed to a non-browser application. A bid request must not contain both a Site and an App object. At a minimum, it is useful to provide a site ID or page URL, but this is not strictly required.
 
@@ -251,12 +248,12 @@ This object should be included if the ad supported content is a website as oppos
 | search | string | Optional | - | Search string that caused navigation to the current page. |
 | mobile | integer | Optional | - | Indicates if the site has been programmed to optimize layout when viewed on mobile devices, where 0 = no, 1 = yes. |
 | privacypolicy | integer | Optional | - | Indicates if the site has a privacy policy, where 0 = no, 1 = yes. |
-| publisher | object | Optional | - | Details about the Publisher (Section 15) of the site. |
-| content | object | Optional | - | Details about the Content (Section 16) within the site. |
+| publisher | object | Optional | - | Details about the Publisher (Section 3.2.15) of the site. |
+| content | object | Optional | - | Details about the Content (Section 3.2.16) within the site. |
 | keywords | string | Optional | - | Comma separated list of keywords about the site. |
 | ext | object | Optional | - | Placeholder for exchange-specific extensions to OpenRTB. |
 
-## 14 Object: App
+## 3.2.14 Object: App
 
 This object should be included if the ad supported content is a non-browser application (typically in mobile) as opposed to a website. A bid request must not contain both an App and a Site object. At a minimum, it is useful to provide an App ID or bundle, but this is not strictly required.
 
@@ -273,12 +270,12 @@ This object should be included if the ad supported content is a non-browser appl
 | ver | string | Optional | - | Application version. |
 | privacypolicy | integer | Optional | - | Indicates if the app has a privacy policy, where 0 = no, 1 = yes. |
 | paid | integer | Optional | - | 0 = app is free, 1 = the app is a paid version. |
-| publisher | object | Optional | - | Details about the Publisher (Section 15) of the app. |
-| content | object | Optional | - | Details about the Content (Section 16) within the app. |
+| publisher | object | Optional | - | Details about the Publisher (Section 3.2.15) of the app. |
+| content | object | Optional | - | Details about the Content (Section 3.2.16) within the app. |
 | keywords | string | Optional | - | Comma separated list of keywords about the app. |
 | ext | object | Optional | - | Placeholder for exchange-specific extensions to OpenRTB. |
 
-## 15 Object: Publisher
+## 3.2.15 Object: Publisher
 
 This object describes the publisher of the media in which the ad will be displayed. The publisher is typically the seller in an OpenRTB transaction.
 
@@ -290,7 +287,7 @@ This object describes the publisher of the media in which the ad will be display
 | domain | string | Optional | - | Highest level domain of the publisher (e.g., "publisher.com"). |
 | ext | object | Optional | - | Placeholder for exchange-specific extensions to OpenRTB. |
 
-## 16 Object: Content
+## 3.2.16 Object: Content
 
 This object describes the content in which the impression will appear, which may be syndicated or non-syndicated content. This object may be useful when syndicated content contains impressions and does not necessarily match the publisher's general content. The exchange might or might not have knowledge of the page where the content is running, as a result of the syndication method. For example might be a video impression embedded in an iframe on an unknown web property or device.
 
@@ -305,7 +302,7 @@ This object describes the content in which the impression will appear, which may
 | genre | string | Optional | - | Genre that best describes the content (e.g., rock, pop, etc). |
 | album | string | Optional | - | Album to which the content belongs; typically for audio. |
 | isrc | string | Optional | - | International Standard Recording Code conforming to ISO-3901. |
-| producer | object | Optional | - | Details about the content Producer (Section 17). |
+| producer | object | Optional | - | Details about the content Producer (Section 3.2.17). |
 | url | string | Optional | - | URL of the content, for buy-side contextualization or review. |
 | cat | string array | Optional | - | Array of IAB content categories that describe the content producer. Refer to List 5.1. |
 | prodq | integer | Optional | - | Production quality. Refer to List 5.13. |
@@ -319,10 +316,10 @@ This object describes the content in which the impression will appear, which may
 | len | integer | Optional | - | Length of content in seconds; appropriate for video or audio. |
 | language | string | Optional | - | Content language using ISO-639-1-alpha-2. |
 | embeddable | integer | Optional | - | Indicator of whether or not the content is embeddable (e.g., an embeddable video player), where 0 = no, 1 = yes. |
-| data | object array | Optional | - | Additional content data. Each Data object (Section 21) represents a different data source. |
+| data | object array | Optional | - | Additional content data. Each Data object (Section 3.2.21) represents a different data source. |
 | ext | object | Optional | - | Placeholder for exchange-specific extensions to OpenRTB. |
 
-## 17 Object: Producer
+## 3.2.17 Object: Producer
 
 This object defines the producer of the content in which the ad will be shown. This is particularly useful when the content is syndicated and may be distributed through different publishers and thus when the producer and publisher are not necessarily the same entity.
 
@@ -334,14 +331,14 @@ This object defines the producer of the content in which the ad will be shown. T
 | domain | string | Optional | - | Highest level domain of the content producer (e.g., "producer.com"). |
 | ext | object | Optional | - | Placeholder for exchange-specific extensions to OpenRTB. |
 
-## 18 Object: Device
+## 3.2.18 Object: Device
 
 This object provides information pertaining to the device through which the user is interacting. Device information includes its hardware, platform, location, and carrier data. The device can refer to a mobile handset, a desktop computer, set top box, or other digital device.
 
 | Attribute | Type | Require/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
 | ua | string | Recommended | - | Browser user agent string. |
-| geo | object | Recommended | - | Location of the device assumed to be the user's current location defined by a Geo object (Section 19). |
+| geo | object | Recommended | - | Location of the device assumed to be the user's current location defined by a Geo object (Section 3.2.19). |
 | dnt | integer | Recommended | - | Standard "Do Not Track" flag as set in the header by the browser, where 0 = tracking is unrestricted, 1 = do not track. |
 | lmt | integer | Recommended | - | "Limit Ad Tracking" signal commercially endorsed (e.g., iOS, Android), where 0 = tracking is unrestricted, 1 = tracking must be limited per commercial guidelines. |
 | ip | string | Recommended | - | IPv4 address closest to device. |
@@ -376,7 +373,7 @@ This object provides information pertaining to the device through which the user
 
 **BEST PRACTICE:** Proper device IP detection in mobile is not straightforward. Typically it involves starting at the left of the x-forwarded-for header, skipping private carrier networks (e.g., 10.x.x.x or 192.x.x.x), and possibly scanning for known carrier IP ranges. Exchanges are urged to research and implement this feature carefully when presenting device IP values to bidders.
 
-## 19 Object: Geo
+## 3.2.19 Object: Geo
 
 This object encapsulates various methods for specifying a geographic location. When subordinate to a Device object, it indicates the location of the device which can also be interpreted as the user's current location. When subordinate to a User object, it indicates the location of the user's home base (i.e., not necessarily their current location).
 
@@ -399,7 +396,7 @@ The lat/lon attributes should only be passed if they conform to the accuracy dep
 | utcoffset | integer | Optional | - | Local time as the number +/- of minutes from UTC. |
 | ext | object | Optional | - | Placeholder for exchange-specific extensions to OpenRTB. |
 
-## 20 Object: User
+## 3.2.20 Object: User
 
 This object contains information known or derived about the human user of the device (i.e., the audience for advertising). The user id is an exchange artifact and may be subject to rotation or other privacy policies. However, this user ID must be stable long enough to serve reasonably as the basis for frequency capping and retargeting.
 
@@ -411,11 +408,11 @@ This object contains information known or derived about the human user of the de
 | gender | string | Optional | - | Gender, where "M" = male, "F" = female, "O" = known to be other (i.e., omitted is unknown). |
 | keywords | string | Optional | - | Comma separated list of keywords, interests, or intent. |
 | customdata | string | Optional | - | Optional feature to pass bidder data that was set in the exchange's cookie. The string must be in base85 cookie safe characters and be in any format. Proper JSON encoding must be used to include "escaped" quotation marks. |
-| geo | object | Optional | - | Location of the user's home base defined by a Geo object (Section 19). This is not necessarily their current location. |
-| data | object array | Optional | - | Additional user data. Each Data object (Section 21) represents a different data source. |
+| geo | object | Optional | - | Location of the user's home base defined by a Geo object (Section 3.2.19). This is not necessarily their current location. |
+| data | object array | Optional | - | Additional user data. Each Data object (Section 3.2.21) represents a different data source. |
 | ext | object | Optional | - | Placeholder for exchange-specific extensions to OpenRTB. |
 
-## 21 Object: Data
+## 3.2.21 Object: Data
 
 The data and segment objects together allow additional data about the related object (e.g., user, content) to be specified. This data may be from multiple sources whether from the exchange itself or third parties as specified by the id field. A bid request can mix data objects from multiple providers. The specific data providers in use should be published by the exchange a priori to its bidders.
 
@@ -423,10 +420,10 @@ The data and segment objects together allow additional data about the related ob
 |-----------|------|------------------|---------|-------------|
 | id | string | Optional | - | Exchange-specific ID for the data provider. |
 | name | string | Optional | - | Exchange-specific name for the data provider. |
-| segment | object array | Optional | - | Array of Segment (Section 22) objects that contain the actual data values. |
+| segment | object array | Optional | - | Array of Segment (Section 3.2.22) objects that contain the actual data values. |
 | ext | object | Optional | - | Placeholder for exchange-specific extensions to OpenRTB. |
 
-## 22 Object: Segment
+## 3.2.22 Object: Segment
 
 Segment objects are essentially key-value pairs that convey specific units of data. The parent Data object is a collection of such values from a given data provider. The specific segment names and value options must be published by the exchange a priori to its bidders.
 

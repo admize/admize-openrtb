@@ -50,31 +50,16 @@ Called when the bid wins the auction. Use this for:
 - Final ad serving decisions
 - Internal tracking
 
-Example:
-```
-https://dsp.example.com/win?id=${AUCTION_BID_ID}&price=${AUCTION_PRICE}
-```
-
 ### Billing Notice (burl)
 Called when the impression becomes billable (typically after viewability confirmation). Use this for:
 - Confirming billable impressions
 - Financial reconciliation
-
-Example:
-```
-https://dsp.example.com/bill?id=${AUCTION_BID_ID}&price=${AUCTION_PRICE}
-```
 
 ### Loss Notice (lurl)
 Called when the bid loses the auction. Use this for:
 - Understanding competition
 - Bid optimization
 - Loss analysis
-
-Example:
-```
-https://dsp.example.com/loss?id=${AUCTION_BID_ID}
-```
 
 ## Substitution Macros
 
@@ -143,12 +128,3 @@ Macros that can be used in URLs for tracking and reporting.
   ]
 }
 ```
-
-## Best Practices
-
-1. **Always include required fields**: id, impid, price, adm, cid
-2. **Use HTTPS URLs**: Especially when secure=1 in bid request
-3. **Implement notification URLs**: For better tracking and optimization
-4. **Include advertiser domain**: Helps with brand safety
-5. **Set appropriate dimensions**: Match the requested size
-6. **Use proper IAB categories**: Helps with content categorization

@@ -69,7 +69,7 @@ This page provides complete examples of bid requests and responses for different
             "hp": 1
           },
           {
-            "asi": "center.Admize.io",
+            "asi": "center.admize.io",
             "sid": "p_1875135558794156",
             "hp": 1
           }
@@ -93,7 +93,7 @@ This page provides complete examples of bid requests and responses for different
           "impid": "320x50",
           "price": 0.3068,
           "adid": "495E8194:1644894781:0363905980",
-          "adm": "<!doctype html>\n<html>\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no\">\n  <link rel=\"icon\" href=\"data:,\">\n  <style>\n    BODY { margin: 0; padding: 0; }\n    .container { width:100%; height:100%; }\n    .block { width:320px; height:50px; margin:0 auto; overflow:hidden; }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"block\">\n      <iframe id=\"Admize_area\" name=\"Admize_area\" style=\"width:320px; height:50px; margin:0px; padding:0px; border: none;\"></iframe>\n    </div>\n  </div>\n  <script>\n    createBeacon('https://test-event.Admize.io/imp/ssp/v1/1-1644894781441-161-23-2446841?ap=${AUCTION_PRICE}');\n  </script>\n</body>\n</html>",
+          "adm": "<!doctype html>\n<html>\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no\">\n  <link rel=\"icon\" href=\"data:,\">\n  <style>\n    BODY { margin: 0; padding: 0; }\n    .container { width:100%; height:100%; }\n    .block { width:320px; height:50px; margin:0 auto; overflow:hidden; }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"block\">\n      <iframe id=\"Admize_area\" name=\"Admize_area\" style=\"width:320px; height:50px; margin:0px; padding:0px; border: none;\"></iframe>\n    </div>\n  </div>\n  <script>\n    createBeacon('https://test-event.admize.io/imp/ssp/v1/1-1644894781441-161-23-2446841?ap=${AUCTION_PRICE}');\n  </script>\n</body>\n</html>",
           "adomain": ["id535886823"],
           "cid": "23501",
           "crid": "454651",
@@ -187,7 +187,7 @@ This page provides complete examples of bid requests and responses for different
           "id": "16abc7ca-0f13-4ae1-6a6e-15ffabec65011",
           "impid": "16abc7ca-0f13-4ae1-6a6e-15ffabec650",
           "price": 0.15,
-          "adm": "{\"native\":{\"ver\":\"1.2\",\"assets\":[{\"id\":1,\"required\":0,\"data\":{\"len\":20,\"type\":12,\"value\":\"더 알아보기\"}},{\"id\":2,\"title\":{\"text\":\"테스트-타이틀\"}},{\"id\":3,\"img\":{\"w\":80,\"h\":80,\"type\":1,\"url\":\"https://cdn-admize.com/images-icon/05d8013c9a129785373d319ef7f01117.jpg\"}},{\"id\":4,\"img\":{\"w\":1200,\"h\":627,\"type\":3,\"url\":\"https://cdn-admize.com/images-main/05d8013c9a129785373d319ef7f01117.jpg\"}}],\"link\":{\"url\":\"https://Admize-test-api-backend.com/link.js\"},\"imptrackers\":[],\"eventtrackers\":[]}}",
+          "adm": "{\"native\":{\"ver\":\"1.2\",\"assets\":[{\"id\":1,\"required\":0,\"data\":{\"len\":20,\"type\":12,\"value\":\"더 알아보기\"}},{\"id\":2,\"title\":{\"text\":\"테스트-타이틀\"}},{\"id\":3,\"img\":{\"w\":80,\"h\":80,\"type\":1,\"url\":\"https://cdn-admize.com/images-icon/05d8013c9a129785373d319ef7f01117.jpg\"}},{\"id\":4,\"img\":{\"w\":1200,\"h\":627,\"type\":3,\"url\":\"https://cdn-admize.com/images-main/05d8013c9a129785373d319ef7f01117.jpg\"}}],\"link\":{\"url\":\"https://admize-test-api-backend.com/link.js\"},\"imptrackers\":[],\"eventtrackers\":[]}}",
           "cid": "1-1-1-1"
         }
       ]
@@ -220,7 +220,7 @@ DSP requests include the `source.ext.schain` object showing the supply chain:
             "hp": 1
           },
           {
-            "asi": "center.Admize.io",
+            "asi": "center.admize.io",
             "sid": "p_1875135558794156",
             "hp": 1
           }
@@ -344,7 +344,7 @@ The native response adm (when decoded) contains:
       }
     ],
     "link": {
-      "url": "https://Admize-test-api-backend.com/link.js"
+      "url": "https://admize-test-api-backend.com/link.js"
     },
     "imptrackers": [],
     "eventtrackers": []

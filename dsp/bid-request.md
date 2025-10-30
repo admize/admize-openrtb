@@ -39,8 +39,8 @@ Describes an ad placement or impression being auctioned.
 | Attribute | Type | Description | Required/Optional | Default |
 |-----------|------|-------------|-------------------|---------|
 | id | string | A unique identifier for this impression within the context of the bid request | Required | - |
-| banner | object | A Banner object | Required* | - |
-| native | object | A Native object | Required* | - |
+| banner | object | A Banner object | Required | - |
+| native | object | A Native object | Required | - |
 | tagid | string | Identifier for specific ad placement or ad tag that was used to initiate the auction | Required | - |
 | instl | integer | 1 = the ad is interstitial or full screen, 0 = not interstitial | Optional | 0 |
 | bidfloor | float | Minimum bid for this impression expressed in CPM | Required | - |
@@ -155,7 +155,7 @@ Extended source information including supply chain.
 
 | Attribute | Type | Description | Required/Optional | Default |
 |-----------|------|-------------|-------------------|---------|
-| schain | object | Admize schain Object (Refer to OpenRTB SupplyChain object) | Optional | - |
+| schain | object | Admize schain Object (Refer to [OpenRTB SupplyChain object](https://github.com/InteractiveAdvertisingBureau/openrtb/blob/main/supplychainobject.md)) | Optional | - |
 
 ### Supply Chain (schain) Example
 
@@ -173,7 +173,7 @@ Extended source information including supply chain.
             "hp": 1
           },
           {
-            "asi": "center.Admize.io",
+            "asi": "center.admize.io",
             "sid": "p_1875135558794156",
             "hp": 1
           }
