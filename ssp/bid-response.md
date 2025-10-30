@@ -67,7 +67,7 @@ A SeatBid object contains one or more Bid objects, each of which relates to a sp
 | exp | integer | Optional | - | Advisory as to the number of seconds the bidder is willing to wait between the auction and the actual impression. |
 | ext | object | Optional | - | Placeholder for bidder-specific extensions to OpenRTB. |
 
-## 3.1 Object: Bid.Ext
+## 3-1 Object: Bid.Ext
 
 | Attribute | Type | Required/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|

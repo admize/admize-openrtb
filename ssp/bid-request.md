@@ -153,7 +153,7 @@ The presence of a Video as a subordinate of the Imp object indicates that this i
 | companiontype | integer array | Optional | - | Supported VAST companion ad types. Refer to List 5.14. Recommended if companion Banner objects are included via the companionad array. If one of these banners will be rendered as an end-card, this can be specified using the vcm attribute with the particular banner (Section 6). |
 | ext | object | Optional | - | Placeholder for exchange-specific extensions to OpenRTB. |
 
-## 7.1 Object: Video.Ext
+## 7-1 Object: Video.Ext
 
 | Attribute | Type | Required/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
