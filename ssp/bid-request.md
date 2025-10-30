@@ -7,7 +7,7 @@ This page describes the bid request format sent from SSPs to Admize.
 HTTP headers sent with each bid request:
 
 - `Content-Type`: application/json
-- `Content-Encoding`: gzip (optional)
+- `Content-Encoding`: gzip (Optional)
 
 ## 1 Object: BidRequest
 
@@ -15,13 +15,13 @@ The top-level bid request object contains a globally unique bid request or aucti
 
 There are also several subordinate objects that provide detailed data to potential buyers. Among these are the Site and App objects, which describe the type of published media in which the impression(s) appear. These objects are highly recommended, but only one applies to a given bid request depending on whether the media is browser-based web content or a non-browser application, respectively.
 
-| Attribute | Type | Require/Optional | Default | Description |
+| Attribute | Type | Required/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
 | id | string | Required | - | Unique ID of the bid request, provided by the exchange. |
 | imp | object array | Required | - | Array of Imp objects (Section 4) representing the impressions offered. At least 1 Imp object is required. |
-| site | object | Recommended | - | Details via a Site object (Section 13) about the publisher's website. Only applicable and recommended for websites. |
-| app | object | Recommended | - | Details via an App object (Section 14) about the publisher's app (i.e., non-browser applications). Only applicable and recommended for apps. |
-| device | object | Recommended | - | Details via a Device object (Section 18) about the user's device to which the impression will be delivered. |
+| site | object | Optional. At least one of site or app must be present. | - | Details via a Site object (Section 13) about the publisher's website. Only applicable and recommended for websites. |
+| app | object | Optional. At least one of site or app must be present. | - | Details via an App object (Section 14) about the publisher's app (i.e., non-browser applications). Only applicable and recommended for apps. |
+| device | object | Required | - | Details via a Device object (Section 18) about the user's device to which the impression will be delivered. |
 | user | object | Recommended | - | Details via a User object (Section 20) about the human user of the device; the advertising audience. |
 | test | integer | Optional | 0 | Indicator of test mode in which auctions are not billable, where 0 = live mode, 1 = test mode. |
 | at | integer | Optional | 2 | Auction type, where 1 = First Price, 2 = Second Price Plus. Exchange-specific auction types can be defined using values greater than 500. |
@@ -42,7 +42,7 @@ There are also several subordinate objects that provide detailed data to potenti
 
 This object describes the nature and behavior of the entity that is the source of the bid request upstream from the exchange. The primary purpose of this object is to define post-auction or upstream decisioning when the exchange itself does not control the final decision. A common example of this is header bidding, but it can also apply to upstream server entities such as another RTB exchange, a mediation platform, or an ad server combines direct campaigns with 3rd party demand in decisioning.
 
-| Attribute | Type | Require/Optional | Default | Description |
+| Attribute | Type | Required/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
 | fd | integer | Recommended | - | Entity responsible for the final impression sale decision, where 0 = exchange, 1 = upstream source. |
 | tid | string | Recommended | - | Transaction ID that must be common across all participants in this bid request (e.g., potentially multiple exchanges). |
@@ -53,7 +53,7 @@ This object describes the nature and behavior of the entity that is the source o
 
 This object contains any legal, governmental, or industry regulations that apply to the request. The coppa flag signals whether or not the request falls under the United States Federal Trade Commission's regulations for the United States Children's Online Privacy Protection Act ("COPPA").
 
-| Attribute | Type | Require/Optional | Default | Description |
+| Attribute | Type | Required/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
 | coppa | integer | Optional | - | Flag indicating if this request is subject to the COPPA regulations established by the USA FTC, where 0 = no, 1 = yes. Refer to Section 7.5 for more information. |
 | ext | object | Optional | - | Placeholder for exchange-specific extensions to OpenRTB. |
@@ -64,17 +64,17 @@ This object describes an ad placement or impression being auctioned. A single bi
 
 The presence of Banner (Section 6), Video (Section 7), and/or Native (Section 9) objects subordinate to the Imp object indicates the type of impression being offered. The publisher can choose one such type which is the typical case or mix them at their discretion. However, any given bid for the impression must conform to one of the offered types.
 
-| Attribute | Type | Require/Optional | Default | Description |
+| Attribute | Type | Required/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
 | id | string | Required | - | A unique identifier for this impression within the context of the bid request (typically, starts with 1 and increments. |
 | metric | object array | Optional | - | An array of Metric object (Section 5). |
-| banner | object | Optional | - | A Banner object (Section 6); required if this impression is offered as a banner ad opportunity. |
-| video | object | Optional | - | A Video object (Section 7); required if this impression is offered as a video ad opportunity. |
-| audio | object | Optional | - | An Audio object (Section 8); required if this impression is offered as an audio ad opportunity. |
-| native | object | Optional | - | A Native object (Section 9); required if this impression is offered as a native ad opportunity. |
-| pmp | object | Optional | - | A Pmp object (Section 11) containing any private marketplace deals in effect for this impression. |
-| displaymanager | string | Optional | - | Name of ad mediation partner, SDK technology, or player responsible for rendering ad (typically video or mobile). Used by some ad servers to customize ad code by partner. Recommended for video and/or apps. |
-| displaymanagerver | string | Optional | - | Version of ad mediation partner, SDK technology, or player responsible for rendering ad (typically video or mobile). Used by some ad servers to customize ad code by partner. Recommended for video and/or apps. |
+| banner | object | Optional. At least one of banner, video, or native must be present. | - | A Banner object (Section 6); required if this impression is offered as a banner ad opportunity. |
+| video | object | Optional. At least one of banner, video, or native must be present. | - | A Video object (Section 7); required if this impression is offered as a video ad opportunity. |
+| audio | object | Not Supported | - | An Audio object (Section 8); required if this impression is offered as an audio ad opportunity. |
+| native | object | Optional. At least one of banner, video, or native must be present. | - | A Native object (Section 9); required if this impression is offered as a native ad opportunity. |
+| pmp | object | Not Supported | - | A Pmp object (Section 11) containing any private marketplace deals in effect for this impression. |
+| displaymanager | string | Optional | Admize | Name of ad mediation partner, SDK technology, or player responsible for rendering ad (typically video or mobile). Used by some ad servers to customize ad code by partner. Recommended for video and/or apps. |
+| displaymanagerver | string | Optional | 1.0.0 | Version of ad mediation partner, SDK technology, or player responsible for rendering ad (typically video or mobile). Used by some ad servers to customize ad code by partner. Recommended for video and/or apps. |
 | instl | integer | Optional | 0 | 1 = the ad is interstitial or full screen, 0 = not interstitial. |
 | tagid | string | Optional | - | Identifier for specific ad placement or ad tag that was used to initiate the auction. This can be useful for debugging of any issues, or for optimization by the buyer. |
 | bidfloor | float | Optional | 0 | Minimum bid for this impression expressed in CPM. |
@@ -89,7 +89,7 @@ The presence of Banner (Section 6), Video (Section 7), and/or Native (Section 9)
 
 This object is associated with an impression as an array of metrics. These metrics can offer insight into the impression to assist with decisioning such as average recent viewability, click-through rate, etc. Each metric is identified by its type, reports the value of the metric, and optionally identifies the source or vendor measuring the value.
 
-| Attribute | Type | Require/Optional | Default | Description |
+| Attribute | Type | Required/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
 | type | string | Required | - | Type of metric being presented using exchange curated string names which should be published to bidders a priori. |
 | value | float | Required | - | Number representing the value of the metric. Probabilities must be in the range 0.0 – 1.0. |
@@ -102,11 +102,11 @@ This object represents the most general type of impression. Although the term "b
 
 The presence of a Banner as a subordinate of the Imp object indicates that this impression is offered as a banner type impression. At the publisher's discretion, that same impression may also be offered as video, audio, and/or native by also including as Imp subordinates objects of those types. However, any given bid for the impression must conform to one of the offered types.
 
-| Attribute | Type | Require/Optional | Default | Description |
+| Attribute | Type | Required/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
 | format | object array | Recommended | - | Array of format objects (Section 10) representing the banner sizes permitted. If none are specified, then use of the h and w attributes is highly recommended. |
-| w | integer | Optional | - | Exact width in device independent pixels (DIPS); recommended if no format objects are specified. |
-| h | integer | Optional | - | Exact height in device independent pixels (DIPS); recommended if no format objects are specified. |
+| w | integer | Required | - | Exact width in device independent pixels (DIPS); recommended if no format objects are specified. |
+| h | integer | Required | - | Exact height in device independent pixels (DIPS); recommended if no format objects are specified. |
 | btype | integer array | Optional | - | Blocked banner ad types. Refer to List 5.2. |
 | battr | integer array | Optional | - | Blocked creative attributes. Refer to List 5.3. |
 | pos | integer | Optional | - | Ad position on screen. Refer to List 5.4. |
@@ -124,12 +124,12 @@ This object represents an in-stream video impression. Many of the fields are non
 
 The presence of a Video as a subordinate of the Imp object indicates that this impression is offered as a video type impression. At the publisher's discretion, that same impression may also be offered as banner, audio, and/or native by also including as Imp subordinates objects of those types. However, any given bid for the impression must conform to one of the offered types.
 
-| Attribute | Type | Require/Optional | Default | Description |
+| Attribute | Type | Required/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
 | mimes | string array | Required | - | Content MIME types supported (e.g., "video/x-ms-wmv", "video/mp4"). |
-| minduration | integer | Recommended | - | Minimum video ad duration in seconds. |
-| maxduration | integer | Recommended | - | Maximum video ad duration in seconds. |
-| protocols | integer array | Recommended | - | Array of supported video protocols. Refer to List 5.8. At least one supported protocol must be specified in either the protocol or protocols attribute. |
+| minduration | integer | Required | - | Minimum video ad duration in seconds. |
+| maxduration | integer | Required | - | Maximum video ad duration in seconds. |
+| protocols | integer array | Required | - | Array of supported video protocols. Refer to List 5.8. At least one supported protocol must be specified in either the protocol or protocols attribute. **Supports VAST Only (VAST 2.0 - 4.0)** |
 | w | integer | Recommended | - | Width of the video player in device independent pixels (DIPS). |
 | h | integer | Recommended | - | Height of the video player in device independent pixels (DIPS). |
 | startdelay | integer | Recommended | - | Indicates the start delay in seconds for pre-roll, mid-roll, or post-roll ad placements. Refer to List 5.12 for additional generic values. |
@@ -153,13 +153,19 @@ The presence of a Video as a subordinate of the Imp object indicates that this i
 | companiontype | integer array | Optional | - | Supported VAST companion ad types. Refer to List 5.14. Recommended if companion Banner objects are included via the companionad array. If one of these banners will be rendered as an end-card, this can be specified using the vcm attribute with the particular banner (Section 6). |
 | ext | object | Optional | - | Placeholder for exchange-specific extensions to OpenRTB. |
 
+## 7.1 Object: Video.Ext
+
+| Attribute | Type | Required/Optional | Default | Description |
+|-----------|------|------------------|---------|-------------|
+| rewarded | integer | Required | - | Non Rewarded = 0, Rewarded = 1. |
+
 ## 8 Object: Audio
 
 This object represents an audio type impression. Many of the fields are non-essential for minimally viable transactions, but are included to offer fine control when needed. Audio in OpenRTB generally assumes compliance with the DAAST standard. As such, the notion of companion ads is supported by optionally including an array of Banner objects (refer to the Banner object in Section 6) that define these companion ads.
 
 The presence of a Audio as a subordinate of the Imp object indicates that this impression is offered as an audio type impression. At the publisher's discretion, that same impression may also be offered as banner, video, and/or native by also including as Imp subordinates objects of those types. However, any given bid for the impression must conform to one of the offered types.
 
-| Attribute | Type | Require/Optional | Default | Description |
+| Attribute | Type | Required/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
 | mimes | string array | Required | - | Content MIME types supported (e.g., "audio/mp4"). |
 | minduration | integer | Recommended | - | Minimum audio ad duration in seconds. |
@@ -189,7 +195,7 @@ The Native Subcommittee has developed a companion specification to OpenRTB calle
 
 The presence of a Native as a subordinate of the Imp object indicates that this impression is offered as a native type impression. At the publisher's discretion, that same impression may also be offered as banner, video, and/or audio by also including as Imp subordinates objects of those types. However, any given bid for the impression must conform to one of the offered types.
 
-| Attribute | Type | Require/Optional | Default | Description |
+| Attribute | Type | Required/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
 | request | string | Required | - | Request payload complying with the Native Ad Specification. |
 | ver | string | Recommended | - | Version of the Dynamic Native Ads API to which request complies; highly recommended for efficient parsing. |
@@ -201,7 +207,7 @@ The presence of a Native as a subordinate of the Imp object indicates that this 
 
 This object represents an allowed size (i.e., height and width combination) or Flex Ad parameters for a banner impression. These are typically used in an array where multiple sizes are permitted. It is recommended that either the w/h pair or the wratio/hratio/wmin set (i.e., for Flex Ads) be specified.
 
-| Attribute | Type | Require/Optional | Default | Description |
+| Attribute | Type | Required/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
 | w | integer | Optional | - | Width in device independent pixels (DIPS). |
 | h | integer | Optional | - | Height in device independent pixels (DIPS). |
@@ -214,7 +220,7 @@ This object represents an allowed size (i.e., height and width combination) or F
 
 This object is the private marketplace container for direct deals between buyers and sellers that may pertain to this impression. The actual deals are represented as a collection of Deal objects. Refer to Section 7.3 for more details.
 
-| Attribute | Type | Require/Optional | Default | Description |
+| Attribute | Type | Required/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
 | private_auction | integer | Optional | 0 | Indicator of auction eligibility to seats named in the Direct Deals object, where 0 = all bids are accepted, 1 = bids are restricted to the deals specified and the terms thereof. |
 | deals | object array | Optional | - | Array of Deal (Section 12) objects that convey the specific deals applicable to this impression. |
@@ -224,7 +230,7 @@ This object is the private marketplace container for direct deals between buyers
 
 This object constitutes a specific deal that was struck a priori between a buyer and a seller. Its presence with the Pmp collection indicates that this impression is available under the terms of that deal. Refer to Section 7.3 for more details.
 
-| Attribute | Type | Require/Optional | Default | Description |
+| Attribute | Type | Required/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
 | id | string | Required | - | A unique identifier for the direct deal. |
 | bidfloor | float | Optional | 0 | Minimum bid for this impression expressed in CPM. |
@@ -238,11 +244,11 @@ This object constitutes a specific deal that was struck a priori between a buyer
 
 This object should be included if the ad supported content is a website as opposed to a non-browser application. A bid request must not contain both a Site and an App object. At a minimum, it is useful to provide a site ID or page URL, but this is not strictly required.
 
-| Attribute | Type | Require/Optional | Default | Description |
+| Attribute | Type | Required/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
-| id | string | Recommended | - | Exchange-specific site ID. |
-| name | string | Optional | - | Site name (may be aliased at the publisher's request). |
-| domain | string | Optional | - | Domain of the site (e.g., "mysite.foo.com"). |
+| id | string | Required | - | Exchange-specific site ID. |
+| name | string | Required | - | Site name (may be aliased at the publisher's request). |
+| domain | string | Required | - | Domain of the site (e.g., "mysite.foo.com"). |
 | cat | string array | Optional | - | Array of IAB content categories of the site. Refer to List 5.1. |
 | sectioncat | string array | Optional | - | Array of IAB content categories that describe the current section of the site. Refer to List 5.1. |
 | pagecat | string array | Optional | - | Array of IAB content categories that describe the current page or view of the site. Refer to List 5.1. |
@@ -260,11 +266,11 @@ This object should be included if the ad supported content is a website as oppos
 
 This object should be included if the ad supported content is a non-browser application (typically in mobile) as opposed to a website. A bid request must not contain both an App and a Site object. At a minimum, it is useful to provide an App ID or bundle, but this is not strictly required.
 
-| Attribute | Type | Require/Optional | Default | Description |
+| Attribute | Type | Required/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
-| id | string | Recommended | - | Exchange-specific app ID. |
-| name | string | Optional | - | App name (may be aliased at the publisher's request). |
-| bundle | string | Optional | - | A platform-specific application identifier intended to be unique to the app and independent of the exchange. On Android, this should be a bundle or package name (e.g., com.foo.mygame). On iOS, it is typically a numeric ID. |
+| id | string | Required | - | Exchange-specific app ID. |
+| name | string | Required | - | App name (may be aliased at the publisher's request). |
+| bundle | string | Required | - | A platform-specific application identifier intended to be unique to the app and independent of the exchange. On Android, this should be a bundle or package name (e.g., com.foo.mygame). On iOS, it is typically a numeric ID. |
 | domain | string | Optional | - | Domain of the app (e.g., "mygame.foo.com"). |
 | storeurl | string | Optional | - | App store URL for an installed app; for IQG 2.1 compliance. |
 | cat | string array | Optional | - | Array of IAB content categories of the app. Refer to List 5.1. |
@@ -282,7 +288,7 @@ This object should be included if the ad supported content is a non-browser appl
 
 This object describes the publisher of the media in which the ad will be displayed. The publisher is typically the seller in an OpenRTB transaction.
 
-| Attribute | Type | Require/Optional | Default | Description |
+| Attribute | Type | Required/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
 | id | string | Optional | - | Exchange-specific publisher ID. |
 | name | string | Optional | - | Publisher name (may be aliased at the publisher's request). |
@@ -294,7 +300,7 @@ This object describes the publisher of the media in which the ad will be display
 
 This object describes the content in which the impression will appear, which may be syndicated or non-syndicated content. This object may be useful when syndicated content contains impressions and does not necessarily match the publisher's general content. The exchange might or might not have knowledge of the page where the content is running, as a result of the syndication method. For example might be a video impression embedded in an iframe on an unknown web property or device.
 
-| Attribute | Type | Require/Optional | Default | Description |
+| Attribute | Type | Required/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
 | id | string | Optional | - | ID uniquely identifying the content. |
 | episode | integer | Optional | - | Episode number. |
@@ -326,7 +332,7 @@ This object describes the content in which the impression will appear, which may
 
 This object defines the producer of the content in which the ad will be shown. This is particularly useful when the content is syndicated and may be distributed through different publishers and thus when the producer and publisher are not necessarily the same entity.
 
-| Attribute | Type | Require/Optional | Default | Description |
+| Attribute | Type | Required/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
 | id | string | Optional | - | Content producer or originator ID. Useful if content is syndicated and may be posted on a site using embed tags. |
 | name | string | Optional | - | Content producer or originator name (e.g., "Warner Bros"). |
@@ -338,7 +344,7 @@ This object defines the producer of the content in which the ad will be shown. T
 
 This object provides information pertaining to the device through which the user is interacting. Device information includes its hardware, platform, location, and carrier data. The device can refer to a mobile handset, a desktop computer, set top box, or other digital device.
 
-| Attribute | Type | Require/Optional | Default | Description |
+| Attribute | Type | Required/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
 | ua | string | Recommended | - | Browser user agent string. |
 | geo | object | Recommended | - | Location of the device assumed to be the user's current location defined by a Geo object (Section 19). |
@@ -349,7 +355,7 @@ This object provides information pertaining to the device through which the user
 | devicetype | integer | Optional | - | The general type of device. Refer to List 5.21. |
 | make | string | Optional | - | Device make (e.g., "Apple"). |
 | model | string | Optional | - | Device model (e.g., "iPhone"). |
-| os | string | Optional | - | Device operating system (e.g., "iOS"). |
+| os | string | Required | - | Device operating system (e.g., "iOS"). |
 | osv | string | Optional | - | Device operating system version (e.g., "3.1.2"). |
 | hwv | string | Optional | - | Hardware version of the device (e.g., "5S" for iPhone 5S). |
 | h | integer | Optional | - | Physical height of the screen in pixels. |
@@ -372,17 +378,13 @@ This object provides information pertaining to the device through which the user
 | macmd5 | string | Optional | - | MAC address of the device; hashed via MD5. |
 | ext | object | Optional | - | Placeholder for exchange-specific extensions to OpenRTB. |
 
-**BEST PRACTICE:** There are currently no prominent open source lists for device makes, models, operating systems, or carriers. Exchanges typically use commercial products or other proprietary lists for these attributes. Until suitable open standards are available, exchanges are highly encouraged to publish lists of their device make, model, operating system, and carrier values to bidders.
-
-**BEST PRACTICE:** Proper device IP detection in mobile is not straightforward. Typically it involves starting at the left of the x-forwarded-for header, skipping private carrier networks (e.g., 10.x.x.x or 192.x.x.x), and possibly scanning for known carrier IP ranges. Exchanges are urged to research and implement this feature carefully when presenting device IP values to bidders.
-
 ## 19 Object: Geo
 
 This object encapsulates various methods for specifying a geographic location. When subordinate to a Device object, it indicates the location of the device which can also be interpreted as the user's current location. When subordinate to a User object, it indicates the location of the user's home base (i.e., not necessarily their current location).
 
 The lat/lon attributes should only be passed if they conform to the accuracy depicted in the type attribute. For example, the centroid of a geographic region such as postal code should not be passed.
 
-| Attribute | Type | Require/Optional | Default | Description |
+| Attribute | Type | Required/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
 | lat | float | Optional | - | Latitude from -90.0 to +90.0, where negative is south. |
 | lon | float | Optional | - | Longitude from -180.0 to +180.0, where negative is west. |
@@ -403,7 +405,7 @@ The lat/lon attributes should only be passed if they conform to the accuracy dep
 
 This object contains information known or derived about the human user of the device (i.e., the audience for advertising). The user id is an exchange artifact and may be subject to rotation or other privacy policies. However, this user ID must be stable long enough to serve reasonably as the basis for frequency capping and retargeting.
 
-| Attribute | Type | Require/Optional | Default | Description |
+| Attribute | Type | Required/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
 | id | string | Recommended | - | Exchange-specific ID for the user. At least one of id or buyeruid is recommended. |
 | buyeruid | string | Recommended | - | Buyer-specific ID for the user as mapped by the exchange for the buyer. At least one of buyeruid or id is recommended. |
@@ -419,7 +421,7 @@ This object contains information known or derived about the human user of the de
 
 The data and segment objects together allow additional data about the related object (e.g., user, content) to be specified. This data may be from multiple sources whether from the exchange itself or third parties as specified by the id field. A bid request can mix data objects from multiple providers. The specific data providers in use should be published by the exchange a priori to its bidders.
 
-| Attribute | Type | Require/Optional | Default | Description |
+| Attribute | Type | Required/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
 | id | string | Optional | - | Exchange-specific ID for the data provider. |
 | name | string | Optional | - | Exchange-specific name for the data provider. |
@@ -430,7 +432,7 @@ The data and segment objects together allow additional data about the related ob
 
 Segment objects are essentially key-value pairs that convey specific units of data. The parent Data object is a collection of such values from a given data provider. The specific segment names and value options must be published by the exchange a priori to its bidders.
 
-| Attribute | Type | Require/Optional | Default | Description |
+| Attribute | Type | Required/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
 | id | string | Optional | - | ID of the data segment specific to the data provider. |
 | name | string | Optional | - | Name of the data segment specific to the data provider. |

@@ -12,10 +12,10 @@ This object is the top-level bid response object (i.e., the unnamed outer JSON o
 
 To express a "no-bid", the options are to return an empty response with HTTP 204. Alternately if the bidder wishes to convey to the exchange a reason for not bidding, just a BidResponse object is returned with a reason code in the nbr attribute.
 
-| Attribute | Type | Require/Optional | Default | Description |
+| Attribute | Type | Required/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
 | id | string | Required | - | ID of the bid request to which this is a response. |
-| seatbid | object array | Optional | - | Array of seatbid objects; 1+ required if a bid is to be made. |
+| seatbid | object array | Required | - | Array of seatbid objects; 1+ required if a bid is to be made. |
 | bidid | string | Optional | - | Bidder generated response ID to assist with logging/tracking. |
 | cur | string | Optional | "USD" | Bid currency using ISO-4217 alpha codes. |
 | customdata | string | Optional | - | Optional feature to allow a bidder to set data in the exchange's cookie. The string must be in base85 cookie safe characters and be in any format. Proper JSON encoding must be used to include "escaped" quotation marks. |
@@ -26,7 +26,7 @@ To express a "no-bid", the options are to return an empty response with HTTP 204
 
 A bid response can contain multiple SeatBid objects, each on behalf of a different bidder seat and each containing one or more individual bids. If multiple impressions are presented in the request, the `group` attribute can be used to specify if a seat is willing to accept any impressions that it can win (default) or if it is only interested in winning any if it can win them all as a group.
 
-| Attribute | Type | Require/Optional | Default | Description |
+| Attribute | Type | Required/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
 | bid | object array | Required | - | Array of 1+ Bid objects (Section 3) each related to an impression. Multiple bids can relate to the same impression. |
 | seat | string | Optional | - | ID of the buyer seat (e.g., advertiser, agency) on whose behalf this bid is made. |
@@ -37,7 +37,7 @@ A bid response can contain multiple SeatBid objects, each on behalf of a differe
 
 A SeatBid object contains one or more Bid objects, each of which relates to a specific impression in the bid request via the `impid` attribute and constitutes an offer to buy that impression for a given price.
 
-| Attribute | Type | Require/Optional | Default | Description |
+| Attribute | Type | Required/Optional | Default | Description |
 |-----------|------|------------------|---------|-------------|
 | id | string | Required | - | Bidder generated bid ID to assist with logging/tracking. |
 | impid | string | Required | - | ID of the Imp object in the related bid request. |
@@ -67,14 +67,23 @@ A SeatBid object contains one or more Bid objects, each of which relates to a sp
 | exp | integer | Optional | - | Advisory as to the number of seconds the bidder is willing to wait between the auction and the actual impression. |
 | ext | object | Optional | - | Placeholder for bidder-specific extensions to OpenRTB. |
 
-## Notes
+## 3.1 Object: Bid.Ext
 
-For each bid, the `nurl` attribute contains the win notice URL. If the bidder wins the impression, the exchange calls this notice URL to inform the bidder of the win and to convey certain information using substitution macros (see Section 4.4) such as the clearing price. The win notice return or the `adm` attribute can be used to serve markup (see Section 4.3). In either case, the exchange will also apply the aforementioned substitution to any macros found in the markup.
+| Attribute | Type | Required/Optional | Default | Description |
+|-----------|------|------------------|---------|-------------|
+| clicktrackers | string array | Optional | - | ClickTracking Url. |
 
-**BEST PRACTICE:** The essential function of the win notice is to inform a bidder that they won an auction. It does not necessarily imply ad delivery, creative viewability, or billability. Exchanges are highly encouraged to publish to their bidders their event triggers, billing policies, and any other meaning they attach to the win notice. Also, please refer to Section 7.2 for additional guidance on expirations.
+## Substitution Macros
 
-**BEST PRACTICE:** Firing of the billing notice should be server-side and as "close" as possible to where the exchange books revenue in order to minimize discrepancies between exchange and bidder.
+Macros that can be used in URLs for tracking and reporting.
 
-**BEST PRACTICE:** For VAST Video, the IAB prescribes that the VAST impression event is the official signal that the impression is billable. If the `burl` attribute is specified, it too should be fired at the same time if the exchange is adhering to this policy. However, subtle technical issues may lead to additional discrepancies and bidders are cautioned to avoid this scenario.
-
-Several other attributes are used for ad quality checks or enforcing publisher restrictions. These include the advertiser domain via `adomain`, a non-cache-busted URL to an image representative of the content of the campaign via `iurl`, an ID of the campaign and of the creative within the campaign via `cid` and `crid` respectively, an array of creative attribute via `attr`, and the dimensions via `h` and `w`. If the bid pertains to a private marketplace deal, the `dealid` attribute is used to reference that agreement from the bid request.
+| Macro | Description |
+|-------|-------------|
+| ${AUCTION_ID} | ID of the bid request; from BidRequest.id attribute |
+| ${AUCTION_SEAT_ID} | ID of the bidder seat for whom the bid was made |
+| ${AUCTION_AD_ID} | ID of the ad markup the bidder wishes to serve; from bid.adid attribute |
+| ${AUCTION_BID_ID} | ID of the bid; from BidResponse.bidid attribute |
+| ${AUCTION_IMP_ID} | ID of the impression just won; from imp.id attribute |
+| ${AUCTION_CURRENCY} | The currency used in the bid (explicit or implied); for confirmation only |
+| ${AUCTION_PRICE} | Clearing price using the same currency and units as the bid |
+| ${AUCTION_PRICE:B64} | Base64 encoded clearing price |
