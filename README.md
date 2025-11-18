@@ -26,3 +26,4 @@ Choose your integration type to get started:
 ## Support
 
 For technical support or questions, please contact the Admize integration team.
+<fsn_ad@fsn.co.kr>
