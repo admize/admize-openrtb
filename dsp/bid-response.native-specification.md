@@ -173,7 +173,7 @@ The event trackers response is an array of objects and specifies the types of ev
 
 ### Event Tracking Methods
 
-| ID | Name | Require/Optional |
-|----|------|------------------|
-| 1 | img |  |
-| 2 | js | Not Supported |
+| ID | Name | Require/Optional | Description |
+|----|------|------------------|-------------|
+| 1 | img |  | Image-pixel tracking - URL provided will be inserted as a 1x1 pixel at the time of the event |
+| 2 | js | Not Supported |  |

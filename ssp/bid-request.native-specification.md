@@ -12,7 +12,7 @@ The Default column dictates how optional parameters should be interpreted if exp
 | context | integer | Recommended | - | The context in which the ad appears. See Table of Context IDs below for a list of supported context types. |
 | contextsubtype | integer | Optional | - | A more detailed context in which the ad appears. See Table of Context SubType IDs below for a list of supported context subtypes. |
 | plcmttype | integer | Recommended | - | The design/format/layout of the ad unit being offered. See Table of Placement Type IDs below for a list of supported placement types. |
-| plcmtcnt | integer | Optional | 1 | The number of identical placements in this Layout. Refer Section 8.1 Multiplacement Bid Requests for further detail. |
+| plcmtcnt | integer | Optional | 1 | The number of identical placements in this Layout. 1 only |
 | seq | integer | Not Supported | 0 | 0 for the first ad, 1 for the second ad, and so on. Note this would generally NOT be used in combination with plcmtcnt - either you are auctioning multiple identical placements (in which case plcmtcnt>1, seq=0) or you are holding separate auctions for distinct items in the feed (in which case plcmtcnt=1, seq=>=1) |
 | assets | object array | Required | - | An array of Asset Objects. Any bid response must comply with the array of elements expressed in the bid request. |
 | aurlsupport | integer | Not Supported | 0 | Whether the supply source / impression supports returning an assetsurl instead of an asset object. 0 or the absence of the field indicates no such support. |
@@ -95,3 +95,19 @@ The event trackers object specifies the types of events the bidder can request t
 | event | integer | Required | - | Type of event available for tracking. See Event Types table. |
 | methods | integer array | Required | - | Array of the types of tracking available for the given event. See Event Tracking Methods table. |
 | ext | object | Optional | - | This object is a placeholder that may contain custom JSON agreed to by the parties to support flexibility beyond the standard defined in this specification |
+
+### Event Types
+
+| ID | Name | Require/Optional | Description |
+|----|------|------------------|-------------|
+| 1 | Impression |  | Impression |
+| 2 | viewable-mrc50 | Not Supported | Visible impression using MRC definition at 50% in view for 1 second |
+| 3 | viewable-mrc100 | Not Supported | 100% in view for 1 second (GroupM standard) |
+| 4 | viewable-video50 | Not Supported | Visible impression for video using MRC definition at 50% in view for 2 seconds |
+
+### Event Tracking Methods
+
+| ID | Name | Require/Optional | Description |
+|----|------|------------------|-------------|
+| 1 | img |  | Image-pixel tracking - URL provided will be inserted as a 1x1 pixel at the time of the event |
+| 2 | js | Not Supported |  |
